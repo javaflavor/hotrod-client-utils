@@ -53,7 +53,7 @@ IntStream.range(1, 1001)
 
 PartitionedCacheSelector is a utility class for inserting a lot of data into partitioned cache. The partitioned cache is automatically created if necessary.
 
-PartitionedCacheSelector also automatically calls arbitrary logic when each partition completed.
+PartitionedCacheSelector also automatically calls arbitrary logic, partitionCompletionHandler, when each partition completed. The partitionCompletionHandler is called asynchronously. Therefore, the input operations are not blocked.
 
 PartitionedCacheSelector is initialized as follows:
 
