@@ -70,12 +70,19 @@ public class PartitionedCacheSelectorTest {
 		Configuration conf = new ConfigurationBuilder().addServers("localhost:"+port).build();
 		RemoteCacheManager manager = new RemoteCacheManager(conf);
 		int chunkSize = 1000;
-		PartitionedCacheSelector<Integer,String> selector = new PartitionedCacheSelector<>(
-				"partitioned", manager,
-				(k,v) -> Integer.toString((k-1) / chunkSize),	// partitionId
-				(k,v) -> k%chunkSize == 0,						// end partition rule
-				() -> System.out.println("Partition data is uploaded.")	// end partition handler
-		);
+		PartitionedCacheSelector<Integer,String> selector = new PartitionedCacheSelectorBuilder<Integer,String>()
+				.baseCacheName("partitioned")
+				.cacheManager(manager)
+				.partitionIdFunction(
+						(k,v) -> Integer.toString((k-1) / chunkSize)	// partitionId
+				)
+				.partitionCompletionPredicate(
+						(k,v) -> k%chunkSize == 0						// end partition rule
+				)
+				.partitionCompletionHandler(
+						() -> System.out.println("Partition data is uploaded.")	// end partition handler
+				)
+				.build();
 
 		log.info("Start load test.");
 		
