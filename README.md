@@ -19,7 +19,7 @@ $ ${JDG_HOME}/bin/ispn-cli.sh -c --controller=localhost:9990
 [] deploy list-cache-task/target/list-cache-task.jar
 ~~~
 
-The class ParallelRemoteCache does note require any server tasks.
+The class ParallelRemoteCache does not require any server tasks.
 
 ## ParallelRemoteCache
 
