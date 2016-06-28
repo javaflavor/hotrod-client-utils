@@ -16,16 +16,24 @@ import org.jboss.logging.Logger;
 public class ParallelRemoteCache<K,V> extends DelegateBaseRemoteCache<K,V> {
 	static Logger log = Logger.getLogger(ParallelRemoteCache.class);
 	
+	static final String DEFAULT_EXECUTOR_FACTORY_POOL_SIZE_NAME = "infinispan.client.hotrod.default_executor_factory.pool_size";
+	static final int DEFAULT_EXECUTOR_FACTORY_POOL_SIZE = 99;
+	
 	Optional<BiPredicate<K,V>> completionCondition;
 	Runnable completionHandler;
 	Set<CompletableFuture<?>> futures = new CopyOnWriteArraySet<>();
-	int collectFutureThreshold = 50;
+	int collectFutureThreshold;
+	double collectFutureRatio;
 	AtomicBoolean isCollectProcessing = new AtomicBoolean(false);	// may be reset
 	AtomicBoolean isCompleting = new AtomicBoolean(false);			// to be reset
 	CompletableFuture<Void> lastCompletableFuture;					// to be reset
 
 	public ParallelRemoteCache(RemoteCache<K,V> cache) {
 		super(cache);
+		// Obtain max threads of default async executor and set it to collectFutureThreshold.
+		collectFutureThreshold = cache.getRemoteCacheManager().getConfiguration().asyncExecutorFactory().properties()
+			.getIntProperty(DEFAULT_EXECUTOR_FACTORY_POOL_SIZE_NAME, DEFAULT_EXECUTOR_FACTORY_POOL_SIZE);
+		collectFutureRatio = 0.8;
 	}
 
 	public ParallelRemoteCache(RemoteCache<K,V> cache, BiPredicate<K,V> completionCondition, Runnable completionHandler) {
@@ -56,7 +64,7 @@ public class ParallelRemoteCache<K,V> extends DelegateBaseRemoteCache<K,V> {
 			// Collect and join async tasks.
 			log.debugf("Start collecting async tasks. futures.size = %s, isLast = %s", "" + futures.size(), isLast);
 
-			while (futures.size() > collectFutureThreshold) {
+			while (futures.size() > collectFutureThreshold * collectFutureRatio) {
 				// Collect futures to be joined.
 				Set<CompletableFuture<?>> setToJoin = futures.stream().filter(f -> {
 					// If (k,v) is last entry, all futures must be waited.
