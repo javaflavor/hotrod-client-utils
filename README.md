@@ -40,7 +40,7 @@ ParallelRemoteCache<Integer,String> cache = new ParallelRemoteCacheBuilder<Integ
 				(k,v) -> k == 1000
 		)
 		.completionHandler(
-				() -> System.out.println("$$$ All entries are stored with 'isLastEntry rule.")
+				(c) -> System.out.println("$$$ All entries are stored with 'isLastEntry rule.")
 		)
 		.build();
 
@@ -72,7 +72,7 @@ PartitionedCacheSelector<Integer,String> selector = new PartitionedCacheSelector
 				(k,v) -> k%chunkSize == 0						// end partition rule
 		)
 		.partitionCompletionHandler(
-				() -> System.out.println("Partition data is uploaded.")	// end partition handler
+				(c) -> System.out.println("Partition data is uploaded.")	// end partition handler
 		)
 		.build();
 
