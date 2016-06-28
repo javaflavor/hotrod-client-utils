@@ -21,8 +21,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.redhat.example.infinispan.remote.ParallelRemoteCache;
-
 public class ParallelRemoteCacheTest {
 	static Logger log = Logger.getLogger(ParallelRemoteCacheTest.class);
 
@@ -68,7 +66,7 @@ public class ParallelRemoteCacheTest {
 						(k,v) -> k == 1000
 				)
 				.completionHandler(
-						() -> System.out.println("$$$ All entries are stored with 'isLastEntry rule.")
+						(c) -> System.out.println("$$$ All entries are stored with 'isLastEntry rule'. cache: "+c.getName())
 				)
 				.build();
 				
@@ -90,7 +88,7 @@ public class ParallelRemoteCacheTest {
 		ParallelRemoteCache<Integer,String> cache = new ParallelRemoteCacheBuilder<Integer,String>()
 				.cache(origCache)
 				.completionHandler(
-						() -> System.out.println("$$$ All entries are stored with complete().")
+						(c) -> System.out.println("$$$ All entries are stored with complete(). cache: "+c.getName())
 				)
 				.build();
 
@@ -114,7 +112,7 @@ public class ParallelRemoteCacheTest {
 						(k,v) -> k == 1000
 				)
 				.completionHandler(
-						() -> System.out.println("$$$ All entries are stored with 'isLastEntry rule.")
+						(c) -> System.out.println("$$$ All entries are stored with 'isLastEntry rule'. cache: "+c.getName())
 				)
 				.build();
 

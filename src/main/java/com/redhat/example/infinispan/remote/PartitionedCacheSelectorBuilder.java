@@ -3,6 +3,7 @@ package com.redhat.example.infinispan.remote;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -12,7 +13,7 @@ public class PartitionedCacheSelectorBuilder<K,V> {
 	RemoteCacheManager manager;
 	BiFunction<K,V,String> partitionIdFunction;
 	BiPredicate<K,V> partitionCompletionPredicate;
-	Runnable partitionCompletionHandler;
+	Consumer<ParallelRemoteCache<K,V>> partitionCompletionHandler;
 	
 	public PartitionedCacheSelectorBuilder<K,V> baseCacheName(String baseCacheName) {
 		this.baseCacheName = baseCacheName;
@@ -34,7 +35,7 @@ public class PartitionedCacheSelectorBuilder<K,V> {
 		return this;
 	}
 
-	public PartitionedCacheSelectorBuilder<K,V> partitionCompletionHandler(Runnable partitionCompletionHandler) {
+	public PartitionedCacheSelectorBuilder<K,V> partitionCompletionHandler(Consumer<ParallelRemoteCache<K,V>> partitionCompletionHandler) {
 		this.partitionCompletionHandler = partitionCompletionHandler;
 		return this;
 	}

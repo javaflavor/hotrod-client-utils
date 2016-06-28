@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -22,7 +23,7 @@ public class PartitionedCacheSelector<K,V> {
 	RemoteCacheManager manager;
 	Optional<BiFunction<K,V,String>> partitionIdFunction;
 	Optional<BiPredicate<K,V>> partitionCompletionPredicate;
-	Runnable partitionCompletionHandler;
+	Consumer<ParallelRemoteCache<K,V>> partitionCompletionHandler;
 	RemoteCache<?,?> defaultCache;
 	int chunkSize = 100;
 	AtomicInteger count = new AtomicInteger(0);
@@ -33,7 +34,7 @@ public class PartitionedCacheSelector<K,V> {
 			RemoteCacheManager manager,
 			BiFunction<K,V,String> partitionIdFunction,
 			BiPredicate<K,V> partitionCompletionPredicate,
-			Runnable partitionCompletionHandler) {
+			Consumer<ParallelRemoteCache<K,V>> partitionCompletionHandler) {
 		this.baseCacheName = baseCacheName;
 		this.manager = manager;
 		this.partitionIdFunction = Optional.ofNullable(partitionIdFunction);

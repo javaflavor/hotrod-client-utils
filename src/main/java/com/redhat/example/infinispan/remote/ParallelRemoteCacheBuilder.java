@@ -1,13 +1,14 @@
 package com.redhat.example.infinispan.remote;
 
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 import org.infinispan.client.hotrod.RemoteCache;
 
 public class ParallelRemoteCacheBuilder<K,V> {
 	RemoteCache<K,V> cache;
 	BiPredicate<K,V> completionCondition;
-	Runnable completionHandler;
+	Consumer<ParallelRemoteCache<K,V>> completionHandler;
 	
 	public ParallelRemoteCacheBuilder<K,V> cache(RemoteCache<K,V> cache) {
 		this.cache = cache;
@@ -19,7 +20,7 @@ public class ParallelRemoteCacheBuilder<K,V> {
 		return this;
 	}
 	
-	public ParallelRemoteCacheBuilder<K,V> completionHandler(Runnable completionHandler) {
+	public ParallelRemoteCacheBuilder<K,V> completionHandler(Consumer<ParallelRemoteCache<K,V>> completionHandler) {
 		this.completionHandler = completionHandler;
 		return this;
 	}

@@ -80,7 +80,7 @@ public class PartitionedCacheSelectorTest {
 						(k,v) -> k%chunkSize == 0						// end partition rule
 				)
 				.partitionCompletionHandler(
-						() -> System.out.println("Partition data is uploaded.")	// end partition handler
+						(c) -> System.out.println("Partition data is uploaded. partition: "+c.getName())	// end partition handler
 				)
 				.build();
 

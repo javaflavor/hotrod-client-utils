@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.infinispan.client.hotrod.RemoteCache;
@@ -20,7 +21,7 @@ public class ParallelRemoteCache<K,V> extends DelegateBaseRemoteCache<K,V> {
 	static final int DEFAULT_EXECUTOR_FACTORY_POOL_SIZE = 99;
 	
 	Optional<BiPredicate<K,V>> completionCondition;
-	Runnable completionHandler;
+	Consumer<ParallelRemoteCache<K,V>> completionHandler;
 	Set<CompletableFuture<?>> futures = new CopyOnWriteArraySet<>();
 	int collectFutureThreshold;
 	double collectFutureRatio;
@@ -36,7 +37,7 @@ public class ParallelRemoteCache<K,V> extends DelegateBaseRemoteCache<K,V> {
 		collectFutureRatio = 0.8;
 	}
 
-	public ParallelRemoteCache(RemoteCache<K,V> cache, BiPredicate<K,V> completionCondition, Runnable completionHandler) {
+	public ParallelRemoteCache(RemoteCache<K,V> cache, BiPredicate<K,V> completionCondition, Consumer<ParallelRemoteCache<K,V>> completionHandler) {
 		this(cache);
 		this.completionCondition = Optional.ofNullable(completionCondition);
 		this.completionHandler = completionHandler;
@@ -85,7 +86,7 @@ public class ParallelRemoteCache<K,V> extends DelegateBaseRemoteCache<K,V> {
 					futures.stream().forEach(CompletableFuture::join);
 					if (completionHandler != null) {
 						log.infof("Calling completionHandler for cache %s", getName());
-						completionHandler.run();
+						completionHandler.accept(this);
 					}
 				});
 			}
