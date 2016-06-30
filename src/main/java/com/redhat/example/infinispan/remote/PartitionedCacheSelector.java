@@ -81,7 +81,7 @@ public class PartitionedCacheSelector<K,V> {
 				basecache = manager.getCache(partitionedCacheName);
 			} else {
 				// Create new partitioned cache.
-				System.out.println("Creating new partioned cache: "+partitionedCacheName);
+				log.infof("Creating new partioned cache: %s", partitionedCacheName);
 				defaultCache.execute("manage-cache", new HashMap<String,String>() {{
 					put("command", "create"); put("cacheName", partitionedCacheName);
 				}});
