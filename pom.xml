@@ -16,17 +16,14 @@
 		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
-			<version>${version.infinispan}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-client-hotrod</artifactId>
-			<version>${version.infinispan}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-embedded-query</artifactId>
-			<version>${version.infinispan}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.redhat.example</groupId>
@@ -40,6 +37,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>org.mk300</groupId>
 			<artifactId>hotrod-minimum-marshaller</artifactId>
@@ -50,6 +48,7 @@
 			<artifactId>minimum-marshaller</artifactId>
 			<version>2.0.2</version>
 		</dependency>
+-->
 		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -90,21 +89,6 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<!-- <configuration> <mainClass>com.redhat.example.jdg.RemoteClientMain</mainClass> 
-					</configuration> -->
-			</plugin>
 		</plugins>
 	</build>
 
@@ -124,8 +108,7 @@
 		<repository>
 			<id>redhat-earlyaccess-repository</id>
 			<name>Red Hat Early Access Repository</name>
-<!-- 			<url>http://maven.repository.redhat.com/earlyaccess/all</url> -->
-			<url>file:///opt/jboss/repository/jboss-datagrid-7.0.0-maven-repository</url>
+ 			<url>http://maven.repository.redhat.com/earlyaccess/all</url>
 			<layout>default</layout>
 			<releases>
 				<enabled>true</enabled>
