@@ -8,7 +8,7 @@
 	<name>${project.artifactId}</name>
 
 	<properties>
-		<version.infinispan>8.3.0.ER4-redhat-1</version.infinispan>     <!-- JDG 7.0.0.Beta -->
+		<version.infinispan>8.3.0.Final-redhat-1</version.infinispan>     <!-- JDG 7.0.0 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -106,9 +106,9 @@
 
 	<repositories>
 		<repository>
-			<id>redhat-earlyaccess-repository</id>
-			<name>Red Hat Early Access Repository</name>
- 			<url>http://maven.repository.redhat.com/earlyaccess/all</url>
+			<id>redhat-ga-repository</id>
+			<name>Red Hat GA Repository</name>
+ 			<url>https://maven.repository.redhat.com/ga/</url>
 			<layout>default</layout>
 			<releases>
 				<enabled>true</enabled>
